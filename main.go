@@ -10,8 +10,6 @@ import (
 	"os"
 )
 
-var db *sql.DB
-
 type Album struct {
 	ID     int64
 	Title  string
@@ -35,7 +33,7 @@ func deleteHandler(c *fiber.Ctx, db *sql.DB) error {
 	return c.SendString("Hello")
 }
 
-func albumsByArtist(name string) ([]Album, error) {
+func albumsByArtist(name string, db *sql.DB) ([]Album, error) {
 	// An albums slice to hold data from returned rows.
 	var albums []Album
 
@@ -68,7 +66,7 @@ func albumsByArtist(name string) ([]Album, error) {
 }
 
 func dbHandler(c *fiber.Ctx, db *sql.DB) error {
-	albums, err := albumsByArtist("'John Coltrane'")
+	albums, err := albumsByArtist("John Coltrane", db)
 	if err != nil {
 		log.Fatal(err)
 	}
