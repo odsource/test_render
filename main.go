@@ -37,7 +37,7 @@ func albumsByArtist(name string, db *sql.DB) ([]Album, error) {
 	// An albums slice to hold data from returned rows.
 	var albums []Album
 
-	rows, err := db.Query("SELECT * FROM album WHERE artist = ?", name)
+	rows, err := db.Query("SELECT * FROM album WHERE artist = $1", name)
 	if err != nil {
 		return nil, fmt.Errorf("albumsByArtist %q: %v", name, err)
 	}
