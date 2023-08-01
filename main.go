@@ -43,24 +43,13 @@ func albumsByArtist(name string, db *sql.DB) ([]Album, error) {
 	}
 	defer rows.Close()
 	// Loop through rows, using Scan to assign column data to struct fields.
-	if rows != nil {
-		if rows.Next() {
-			var alb Album
-			if err := rows.Scan(&alb.ID, &alb.Title, &alb.Artist, &alb.Price); err != nil {
-				return nil, fmt.Errorf("albumsByArtist %q: %v", name, err)
-			}
-			albums = append(albums, alb)
+	for rows.Next() {
+		var alb Album
+		if err := rows.Scan(&alb.ID, &alb.Title, &alb.Artist, &alb.Price); err != nil {
+			return nil, fmt.Errorf("albumsByArtist %q: %v", name, err)
 		}
+		albums = append(albums, alb)
 	}
-	/*
-		for rows.Next() {
-			var alb Album
-			if err := rows.Scan(&alb.ID, &alb.Title, &alb.Artist, &alb.Price); err != nil {
-				return nil, fmt.Errorf("albumsByArtist %q: %v", name, err)
-			}
-			albums = append(albums, alb)
-		}
-	*/
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("albumsByArtist %q: %v", name, err)
 	}
