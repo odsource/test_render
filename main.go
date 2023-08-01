@@ -45,13 +45,22 @@ func albumsByArtist(name string) ([]Album, error) {
 	}
 	defer rows.Close()
 	// Loop through rows, using Scan to assign column data to struct fields.
-	for rows.Next() {
+	if rows != nil {
 		var alb Album
 		if err := rows.Scan(&alb.ID, &alb.Title, &alb.Artist, &alb.Price); err != nil {
 			return nil, fmt.Errorf("albumsByArtist %q: %v", name, err)
 		}
 		albums = append(albums, alb)
 	}
+	/*
+		for rows.Next() {
+			var alb Album
+			if err := rows.Scan(&alb.ID, &alb.Title, &alb.Artist, &alb.Price); err != nil {
+				return nil, fmt.Errorf("albumsByArtist %q: %v", name, err)
+			}
+			albums = append(albums, alb)
+		}
+	*/
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("albumsByArtist %q: %v", name, err)
 	}
@@ -59,7 +68,7 @@ func albumsByArtist(name string) ([]Album, error) {
 }
 
 func dbHandler(c *fiber.Ctx, db *sql.DB) error {
-	albums, err := albumsByArtist("John Coltrane")
+	albums, err := albumsByArtist("'John Coltrane'")
 	if err != nil {
 		log.Fatal(err)
 	}
