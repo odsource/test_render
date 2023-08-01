@@ -62,12 +62,9 @@ func dbHandler(c *fiber.Ctx, db *sql.DB) error {
 		log.Fatal(err)
 	}
 	fmt.Printf("Albums found: %v\n", albums)
-	return c.Render(
-		"index",
-		fiber.Map{
-			"Artist": albums[0].Artist,
-		},
-	)
+	return c.Render("index", fiber.Map{
+		"Artist": albums,
+	})
 }
 
 func main() {
